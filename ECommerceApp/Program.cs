@@ -27,7 +27,8 @@ namespace ECommerceApp
                 }
             );
             var app = builder.Build();
-
+            //zabezpieczenie przed komunikacj¹ 2 hostów
+            
             app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

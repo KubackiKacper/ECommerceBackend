@@ -18,10 +18,17 @@ namespace ECommerceApp.Controllers
             
         }
         [HttpGet("GetUsers")]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetUsers()
         {
             var users = _db.Users;
-            return Json(users);
+            return Ok(users);
+        }
+
+        [HttpGet("GetProducts")]
+        public async Task<IActionResult> GetProducts()
+        {
+            var users = _db.Products;
+            return Ok(users);
         }
     }
 }
