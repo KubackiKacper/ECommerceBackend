@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECommerceApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250208150753_second")]
-    partial class second
+    [Migration("20250210125008_1002")]
+    partial class _1002
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,7 +40,24 @@ namespace ECommerceApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Category");
+                    b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Electronics"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Food"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Office"
+                        });
                 });
 
             modelBuilder.Entity("ECommerceApp.Models.Order", b =>
@@ -101,7 +118,7 @@ namespace ECommerceApp.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderItem");
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("ECommerceApp.Models.Payment", b =>
@@ -135,7 +152,7 @@ namespace ECommerceApp.Migrations
                     b.HasIndex("OrderId")
                         .IsUnique();
 
-                    b.ToTable("Payment");
+                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("ECommerceApp.Models.Product", b =>
@@ -172,7 +189,49 @@ namespace ECommerceApp.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Product");
+                    b.ToTable("Products");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CategoryId = 1,
+                            Description = "Gaming Console",
+                            ImageURL = "https://localhost:7161/images/PS5console.png",
+                            Name = "PlayStation 5",
+                            Price = 430.99m,
+                            StockQuantity = 2
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CategoryId = 1,
+                            Description = "Gaming Controller",
+                            ImageURL = "https://localhost:7161/images/pad-dualsense5-thumbnail.png",
+                            Name = "DualSense 5",
+                            Price = 50.25m,
+                            StockQuantity = 7
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CategoryId = 2,
+                            Description = "Something you can eat",
+                            ImageURL = "https://localhost:7161/images/fruit-thumbnail.png",
+                            Name = "Apple",
+                            Price = 1.12m,
+                            StockQuantity = 200
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CategoryId = 3,
+                            Description = "Something you can sit on",
+                            ImageURL = "https://localhost:7161/images/officechai-thumbnail.png",
+                            Name = "Office Chair",
+                            Price = 25.61m,
+                            StockQuantity = 30
+                        });
                 });
 
             modelBuilder.Entity("ECommerceApp.Models.Review", b =>
@@ -205,7 +264,7 @@ namespace ECommerceApp.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Review");
+                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("ECommerceApp.Models.User", b =>

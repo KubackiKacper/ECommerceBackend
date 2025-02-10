@@ -30,6 +30,8 @@ namespace ECommerceApp
             //zabezpieczenie przed komunikacj¹ 2 hostów
             
             app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            app.UseStaticFiles();
+            app.UseRouting();
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
