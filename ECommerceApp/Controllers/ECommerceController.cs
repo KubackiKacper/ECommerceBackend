@@ -31,5 +31,11 @@ namespace ECommerceApp.Controllers
             var users = _db.Products;
             return Ok(users);
         }
+        [HttpGet("GetProducts/Details/{id}")]
+        public async Task<IActionResult> GetProductById(int id)
+        {
+            var users = _db.Products.FindAsync(id);
+            return Ok(users);
+        }
     }
 }
