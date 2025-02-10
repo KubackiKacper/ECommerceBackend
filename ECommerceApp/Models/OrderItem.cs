@@ -5,6 +5,7 @@ namespace ECommerceApp.Models
 {
     public class OrderItem
     {
+        //nowe
         [Key]
         public int Id { get; set; }
         [ForeignKey("Order")]
