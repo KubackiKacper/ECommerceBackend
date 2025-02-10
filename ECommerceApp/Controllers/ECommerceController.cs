@@ -6,6 +6,7 @@ using System.Web.Helpers;
 
 namespace ECommerceApp.Controllers
 {
+    //test
     [ApiController]
     [Route("[controller]")]
     public class ECommerceController : Controller
@@ -28,6 +29,12 @@ namespace ECommerceApp.Controllers
         public async Task<IActionResult> GetProducts()
         {
             var users = _db.Products;
+            return Ok(users);
+        }
+        [HttpGet("GetProducts/Details/{id}")]
+        public async Task<IActionResult> GetProductById(int id)
+        {
+            var users = _db.Products.FindAsync(id);
             return Ok(users);
         }
     }
