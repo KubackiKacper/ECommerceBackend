@@ -4,6 +4,7 @@ using ECommerceApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECommerceApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250210170634_thisisit")]
+    partial class thisisit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,7 +51,7 @@ namespace ECommerceApp.Migrations
                         new
                         {
                             Id = 2,
-                            Name = "Mobile"
+                            Name = "Food"
                         },
                         new
                         {
@@ -213,10 +216,10 @@ namespace ECommerceApp.Migrations
                         {
                             Id = 3,
                             CategoryId = 2,
-                            Description = "Easy to carry device",
-                            ImageURL = "https://localhost:7161/images/phone-thumbnail.png",
-                            Name = "Smartphone",
-                            Price = 100.12m,
+                            Description = "Something you can eat",
+                            ImageURL = "https://localhost:7161/images/fruit-thumbnail.png",
+                            Name = "Apple",
+                            Price = 1.12m,
                             StockQuantity = 200
                         },
                         new
