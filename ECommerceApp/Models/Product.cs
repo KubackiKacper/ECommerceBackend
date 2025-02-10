@@ -4,7 +4,7 @@ namespace ECommerceApp.Models
 {
     public class Product
     {
-        //another testiung
+        
         [Key]
         public int Id { get; set; }
         [Required]
