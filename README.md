@@ -1,2 +1,2 @@
-# ECommerceApp
+# ECommerceApp - Backend
 # WORK IN PROGRESS
