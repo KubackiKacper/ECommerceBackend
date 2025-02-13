@@ -5,6 +5,8 @@ namespace ECommerceApp.Models
 {
     public class Product
     {
+        //test
+        //test2
         
         [Key]
         public int Id { get; set; }

@@ -22,23 +22,26 @@ namespace ECommerceApp.Controllers
             _db = db;
             
         }
-        [HttpGet("users")]
-        public async Task<IActionResult> GetUsers()
-        {
-            var users = _db.Users;
-            return Ok(users);
-        }
-
+        
         [HttpGet("products")]
         public IActionResult GetProducts()
         {
-            List<ProductDTO> response = _db.Products.ProjectToType<ProductDTO>().ToList();
+            List<ProductDTO> response = _db.Products.Select(p=>new ProductDTO
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                Price = p.Price,
+                StockQuantity = p.StockQuantity,
+                CategoryId = p.CategoryId,
+                ImageURL = p.ImageURL
+            }).ToList();
 
             
             return Ok(response);
         }
 
-        [HttpGet("GetProducts/Details/{id}")]
+        [HttpGet("products/details/{id}")]
         public async Task<IActionResult> GetProductById(int id)
         {
             var productById = await _db.Products.FindAsync(id);
