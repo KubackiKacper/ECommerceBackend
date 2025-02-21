@@ -26,19 +26,26 @@ namespace ECommerceApp.Controllers
         [HttpGet("products")]
         public IActionResult GetProducts()
         {
-            List<ProductDTO> response = _db.Products.Select(p=>new ProductDTO
+            try
             {
-                Id = p.Id,
-                Name = p.Name,
-                Description = p.Description,
-                Price = p.Price,
-                StockQuantity = p.StockQuantity,
-                CategoryId = p.CategoryId,
-                ImageURL = p.ImageURL
-            }).ToList();
-
+                List<ProductDTO> response = _db.Products.Select(p => new ProductDTO
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Description = p.Description,
+                    Price = p.Price,
+                    StockQuantity = p.StockQuantity,
+                    CategoryId = p.CategoryId,
+                    ImageURL = p.ImageURL
+                }).ToList();
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
             
-            return Ok(response);
+            
         }
 
         [HttpGet("products/details/{id}")]
