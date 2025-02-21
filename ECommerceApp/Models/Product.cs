@@ -9,24 +9,24 @@ namespace ECommerceApp.Models
         //test2
         
         [Key]
-        public int Id { get; set; }
+        public int Id { get; init; }
         [Required]
         [MaxLength(255)]
-        public string Name { get; set; }
+        public string Name { get; init; }
         [Required]
-        public string Description { get; set; }
+        public string Description { get; init; }
         [Required]
-        public decimal Price { get; set; }
+        public decimal Price { get; init; }
         [Required]
-        public int StockQuantity { get; set; }
+        public int StockQuantity { get; init; }
         [Required]
         [ForeignKey("Category")]
-        public int CategoryId { get; set; }
+        public int CategoryId { get; init; }
         [Required]
-        public string ImageURL { get; set; }
+        public string ImageURL { get; init; }
 
-        public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
-        public List<Review> Reviews { get; set; } = new List<Review>();
-        public Category Category { get; set; }
+        public List<OrderItem> OrderItems { get; init; } = new List<OrderItem>();
+        public List<Review> Reviews { get; init; } = new List<Review>();
+        public Category Category { get; init; }
     }
 }

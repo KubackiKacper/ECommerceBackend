@@ -2,12 +2,13 @@
 ## .NET WebAPI
 ### WORK IN PROGRESS
 
-### This is my implemetation of backend part for my E-Commerce solution. Using C# ASP.NET Core I implemented endpoints, responsible for manimulating and retriving data from Microsoft SQL Server Database. EntityFrameworkCore is responsible for seeding the database with example data and providing relationships between tables. Example of usage of Entity to create table with relationship with another one:
+### This is my implementation of the backend for my E-Commerce solution. Using C# and ASP.NET Core, I have developed endpoints responsible for manipulating and retrieving data from a Microsoft SQL Server database. Entity Framework Core is used for seeding the database with example data and managing relationships between tables.
+### Here’s an example of using an entity to create a table with a relationship to another table:
 ![Reference Image](/README_photos/entity.PNG)
-### Below you can see whole database diagram:
+### Below is the complete database diagram:
 ![Reference Image](/README_photos/database_diagram.PNG)
-### Each endpoint is responsible for diffrent action. For example endpoint, responsible for retrieving data from *Products* table:
+### Each endpoint serves a specific purpose. For example, the following endpoint is responsible for retrieving data from the *Products* table:
 ![Reference Image](/README_photos/get_products.PNG)
-### I am using Data Transfer Object (DTO) files in order to ensure that original object is not changed. After debugging the app what will appear is swagger page with list of all API endpoint.
+### To ensure that the original objects remain unchanged, I use Data Transfer Objects (DTOs). After running the application, the Swagger page displays a list of all API endpoints:
 ![Reference Image](/README_photos/swagger.PNG)
-test
+# This project is currently under development. Any changes or improvements will be updated accordingly.
