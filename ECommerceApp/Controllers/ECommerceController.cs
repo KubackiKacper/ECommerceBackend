@@ -7,6 +7,8 @@ using ECommerceApp.DataTransferObjects;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Collections.Generic;
+
 
 namespace ECommerceApp.Controllers
 {
@@ -19,11 +21,11 @@ namespace ECommerceApp.Controllers
         
         public ECommerceController(ApplicationDbContext db) 
         {
-            _db = db;
-            
+            _db = db;   
         }
         
-        [HttpGet("products")]
+        [HttpGet]
+        [Route("products")]
         public IActionResult GetProducts()
         {
             try
@@ -47,14 +49,82 @@ namespace ECommerceApp.Controllers
             
             
         }
-
-        [HttpGet("products/details/{id}")]
+        [HttpGet]
+        [Route("products/details/{id}")]
         public async Task<IActionResult> GetProductById(int id)
         {
-            var productById = await _db.Products.FindAsync(id);
+            Product productById = await _db.Products.FindAsync(id);
+            try
+            {
 
-            ProductDTO response = productById.Adapt<ProductDTO>();
-            return Ok(response);
+                if (productById!=null)
+                {
+                    ProductDTO response = productById.Adapt<ProductDTO>();
+                    return Ok(response);
+                }
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            
+            
+        }
+
+        [HttpGet]
+        [Route("orders")]
+        public IActionResult GetOrders()
+        {
+            try
+            {
+                List<OrderDTO> response = _db.Orders.Select(o => new OrderDTO
+                {
+                    Id = o.Id,
+                    Email = o.Email,
+                    TotalPrice = o.TotalPrice,
+                    OrderDate = o.OrderDate,
+                    Status = o.Status,
+                    PaymentId = o.PaymentId,
+                }).ToList();
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+
+        }
+
+        [HttpPost]
+        [Route("orders/place_order")]
+        public IActionResult PlaceOrder(OrderDTO orderDTO)
+        {
+            try
+            {
+                var userInput = new Order
+                {
+                    Email = orderDTO.Email,
+                    TotalPrice = orderDTO.TotalPrice,
+                    OrderDate = orderDTO.OrderDate,
+                    Status = orderDTO.Status,
+                    PaymentId = orderDTO.PaymentId,
+                };
+
+                if (userInput != null)
+                {
+                    _db.Orders.Add(userInput);
+                    _db.SaveChanges();
+                }
+                
+                return Created("orders/place_order" + userInput.Id, new {Message = "Success"});
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
