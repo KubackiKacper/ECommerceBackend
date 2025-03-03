@@ -8,17 +8,17 @@ namespace ECommerceApp.Models
         [Key]
         public int Id { get; set; }
         [Required]
-        [ForeignKey("User")]
-        public int UserId { get; set; }
+        [MaxLength(255)]
+        
+        public string Email { get; set; }
         [Required]
         public decimal TotalPrice { get; set; }
         [Required]
         public DateTime OrderDate { get; set; }
         [Required]
         [MaxLength(50)]
-        public string Status { get; set; }
+        public string Address { get; set; }
 
-        public User User { get; set; }
         [ForeignKey("Payment")]
         public int PaymentId { get; set; }
 
