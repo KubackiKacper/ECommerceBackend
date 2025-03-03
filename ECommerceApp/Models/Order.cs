@@ -17,7 +17,7 @@ namespace ECommerceApp.Models
         public DateTime OrderDate { get; set; }
         [Required]
         [MaxLength(50)]
-        public string Status { get; set; }
+        public string Address { get; set; }
 
         [ForeignKey("Payment")]
         public int PaymentId { get; set; }

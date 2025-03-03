@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ECommerceApp.DataTransferObjects
 {
-    public class OrderDTO
+    public class OrderPaymentDTO
     {
         public int OrderId { get; set; }
         public string Email { get; set; }
@@ -15,5 +15,14 @@ namespace ECommerceApp.DataTransferObjects
         public string Address { get; set; }
 
         public int PaymentId { get; set; }
+
+        public string PaymentMethod { get; set; }
+
+        public string Status { get; set; }
+
+        public string CardName { get; set; }
+        public string CardNumber { get; set; }
+        public string CardCVV { get; set; }
+        public DateTime CardExpirationDate { get; set; }
     }
 }

@@ -81,12 +81,39 @@ namespace ECommerceApp.Controllers
             {
                 List<OrderDTO> response = _db.Orders.Select(o => new OrderDTO
                 {
-                    Id = o.Id,
+                    OrderId = o.Id,
                     Email = o.Email,
                     TotalPrice = o.TotalPrice,
                     OrderDate = o.OrderDate,
-                    Status = o.Status,
+                    Address = o.Address,
                     PaymentId = o.PaymentId,
+                }).ToList();
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+
+        }
+
+        [HttpGet]
+        [Route("payments")]
+        public IActionResult GetPayments()
+        {
+            try
+            {
+                List<PaymentDTO> response = _db.Payments.Select(p => new PaymentDTO
+                {
+                    PaymentId = p.Id,
+                    OrderId = p.OrderId,
+                    PaymentMethod = p.PaymentMethod,
+                    Status = p.Status,
+                    CardName =p.CardName,
+                    CardCVV = p.CardCVV,
+                    CardExpirationDate =p.CardExpirationDate,
+                    CardNumber=p.CardNumber,
                 }).ToList();
                 return Ok(response);
             }
@@ -100,30 +127,51 @@ namespace ECommerceApp.Controllers
 
         [HttpPost]
         [Route("orders/place_order")]
-        public IActionResult PlaceOrder(OrderDTO orderDTO)
+        public async Task<IActionResult> PlaceOrder(OrderPaymentDTO orderPaymentDTO)
         {
-            try
+            using (var transaction = await _db.Database.BeginTransactionAsync())
             {
-                var userInput = new Order
+                try
                 {
-                    Email = orderDTO.Email,
-                    TotalPrice = orderDTO.TotalPrice,
-                    OrderDate = orderDTO.OrderDate,
-                    Status = orderDTO.Status,
-                    PaymentId = orderDTO.PaymentId,
-                };
+                    Order orderInput = new Order
+                    {
+                        Email = orderPaymentDTO.Email,
+                        TotalPrice = orderPaymentDTO.TotalPrice,
+                        OrderDate = orderPaymentDTO.OrderDate,
+                        Address = orderPaymentDTO.Address,
+                        PaymentId = orderPaymentDTO.PaymentId,
+                    };
 
-                if (userInput != null)
-                {
-                    _db.Orders.Add(userInput);
-                    _db.SaveChanges();
+                    _db.Orders.Add(orderInput);
+                    await _db.SaveChangesAsync();
+
+                    Payment paymentInput = new Payment
+                    {
+                        OrderId = orderInput.Id,
+                        PaymentMethod = orderPaymentDTO.PaymentMethod,
+                        Status = orderPaymentDTO.Status,
+                        CardName= orderPaymentDTO.CardName,
+                        CardCVV = orderPaymentDTO.CardCVV,
+                        CardExpirationDate = orderPaymentDTO.CardExpirationDate,
+                        CardNumber= orderPaymentDTO.CardNumber,
+                        
+                    };
+
+                    _db.Payments.Add(paymentInput);
+                    await _db.SaveChangesAsync();
+
+                    orderInput.PaymentId = paymentInput.Id;
+                    _db.Orders.Update(orderInput);
+                    await _db.SaveChangesAsync();
+                    await transaction.CommitAsync();
+
+                    return Created("orders/place_order" + orderInput.Id, new {Message = "Success"});
                 }
-                
-                return Created("orders/place_order" + userInput.Id, new {Message = "Success"});
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    return BadRequest(ex.Message);
+                }
             }
         }
     }
