@@ -1,5 +1,6 @@
 
 using ECommerceApp.Data;
+using ECommerceApp.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace ECommerceApp
@@ -17,6 +18,7 @@ namespace ECommerceApp
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddScoped<IPlaceOrderService, PlaceOrderService>();
             builder.Services.AddDbContext<ApplicationDbContext>(
                 (options) =>
                 {

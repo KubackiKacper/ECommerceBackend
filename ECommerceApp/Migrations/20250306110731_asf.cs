@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ECommerceApp.Migrations
 {
     /// <inheritdoc />
-    public partial class work123567 : Migration
+    public partial class asf : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
