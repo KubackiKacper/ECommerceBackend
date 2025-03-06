@@ -3,26 +3,22 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ECommerceApp.Models
 {
-    public class Payment
+    public class PaymentDTO
     {
-        [Key]
-        public int Id { get; set; }
-        [Required]
-        [ForeignKey("Order")]
+        public int PaymentId { get; set; }
+
         public int OrderId { get; set; }
-        [Required]
-        [MaxLength(50)]
+
         public string PaymentMethod { get; set; }
-        [Required]
-        [MaxLength(50)]
+
         public string Status { get; set; }
-        [Required]
-        [MaxLength(100)]
+
         public string CardName { get; set; }
         public string CardNumber { get; set; }
         public string CardCVV { get; set; }
         public DateTime CardExpirationDate { get; set; }
 
-        public Order Order { get; set; }
     }
+
+
 }
