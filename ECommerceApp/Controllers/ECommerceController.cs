@@ -13,126 +13,82 @@ using ECommerceApp.Services;
 
 namespace ECommerceApp.Controllers
 {
-    //test
     [ApiController]
     [Route("[controller]")]
     public class ECommerceController : Controller
     {
-        private readonly ApplicationDbContext _db;
-        private readonly IPlaceOrderService _placeOrder;
+        private readonly IShopService _service;
 
-        public ECommerceController(ApplicationDbContext db, IPlaceOrderService placeOrder) 
-        {
-            _db = db;   
-            _placeOrder = placeOrder;
+        public ECommerceController(IShopService shopService) 
+        { 
+            _service = shopService;
         }
         
         [HttpGet]
         [Route("products")]
-        public IActionResult GetProducts()
+        public async Task<IActionResult> GetProducts()
         {
             try
             {
-                List<ProductDTO> response = _db.Products.Select(p => new ProductDTO
-                {
-                    Id = p.Id,
-                    Name = p.Name,
-                    Description = p.Description,
-                    Price = p.Price,
-                    StockQuantity = p.StockQuantity,
-                    CategoryId = p.CategoryId,
-                    ImageURL = p.ImageURL
-                }).ToList();
-                return Ok(response);
+                var productResponse = await _service.GetAllProducts();
+                return Ok(productResponse);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
-            }
-            
-            
+            }            
         }
+
         [HttpGet]
         [Route("products/details/{id}")]
         public async Task<IActionResult> GetProductById(int id)
         {
-            Product productById = await _db.Products.FindAsync(id);
             try
             {
-
-                if (productById!=null)
-                {
-                    ProductDTO response = productById.Adapt<ProductDTO>();
-                    return Ok(response);
-                }
-
-                return Ok();
+                var productByIdResponse = await _service.GetProductById(id);
+                return Ok(productByIdResponse);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
-            }
-            
-            
+            }            
         }
 
         [HttpGet]
         [Route("orders")]
-        public IActionResult GetOrders()
+        public async Task<IActionResult> GetOrders()
         {
             try
             {
-                List<OrderDTO> response = _db.Orders.Select(o => new OrderDTO
-                {
-                    OrderId = o.Id,
-                    Email = o.Email,
-                    TotalPrice = o.TotalPrice,
-                    OrderDate = o.OrderDate,
-                    Address = o.Address,
-                    PaymentId = o.PaymentId,
-                }).ToList();
-                return Ok(response);
+                var ordersResponse = await _service.GetAllOrders();
+                return Ok(ordersResponse);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-
-
         }
 
         [HttpGet]
         [Route("payments")]
-        public IActionResult GetPayments()
+        public async Task<IActionResult> GetPayments()
         {
             try
             {
-                List<PaymentDTO> response = _db.Payments.Select(p => new PaymentDTO
-                {
-                    PaymentId = p.Id,
-                    OrderId = p.OrderId,
-                    PaymentMethod = p.PaymentMethod,
-                    Status = p.Status,
-                    CardName =p.CardName,
-                    CardCVV = p.CardCVV,
-                    CardExpirationDate =p.CardExpirationDate,
-                    CardNumber=p.CardNumber,
-                }).ToList();
-                return Ok(response);
+                var paymentsResponse = await _service.GetAllPayments();              
+                return Ok(paymentsResponse);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-
-
         }
-        //test
+
         [HttpPost]
         [Route("orders/place_order")]
         public async Task<IActionResult> PlaceOrder(OrderPaymentDTO orderPaymentDTO)
         {
-            var orderResponse = await _placeOrder.PlaceOrderAsync(orderPaymentDTO);
+            var orderResponse = await _service.PlaceOrder(orderPaymentDTO);
 
             if (orderResponse == null)
             {

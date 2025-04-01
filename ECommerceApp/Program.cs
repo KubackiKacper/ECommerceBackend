@@ -18,7 +18,7 @@ namespace ECommerceApp
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddScoped<IPlaceOrderService, PlaceOrderService>();
+            builder.Services.AddScoped<IShopService, ShopService>();
             builder.Services.AddDbContext<ApplicationDbContext>(
                 (options) =>
                 {
@@ -29,8 +29,7 @@ namespace ECommerceApp
                 }
             );
             var app = builder.Build();
-            //zabezpieczenie przed komunikacj¹ 2 hostów
-            
+           
             app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseStaticFiles();
             app.UseRouting();

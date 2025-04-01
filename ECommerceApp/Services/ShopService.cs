@@ -11,15 +11,67 @@ using System.Collections.Generic;
 
 namespace ECommerceApp.Services
 {
-    public class PlaceOrderService : IPlaceOrderService
+    public class ShopService : IShopService
     {
         private readonly ApplicationDbContext _context;
-        public PlaceOrderService(ApplicationDbContext context)
+        public ShopService(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public async Task<OrderPaymentDTO> PlaceOrderAsync(OrderPaymentDTO orderPaymentDTO)
+        public async Task<ProductDTO[]> GetAllProducts()
+        {
+            ProductDTO[] response = await _context.Products.Select(p => new ProductDTO
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                Price = p.Price,
+                StockQuantity = p.StockQuantity,
+                CategoryId = p.CategoryId,
+                ImageURL = p.ImageURL
+            }).ToArrayAsync();
+            return response;
+        }
+
+        public async Task<ProductDTO> GetProductById(int id)
+        {
+            Product response = await _context.Products.FindAsync(id);
+            ProductDTO result = new ProductDTO
+            {
+                Id = response.Id,
+                Name = response.Name,
+                Description = response.Description,
+                Price = response.Price,
+                StockQuantity = response.StockQuantity,
+                CategoryId = response.CategoryId,
+                ImageURL = response.ImageURL
+            };
+            if (result == null)
+            {
+                return null;
+            }
+            else
+            {
+                return result;
+            }
+        }
+
+        public async Task<OrderDTO[]> GetAllOrders()
+        {
+            OrderDTO[] response = await _context.Orders.Select(o => new OrderDTO
+            {
+                OrderId = o.Id,
+                Email = o.Email,
+                TotalPrice = o.TotalPrice,
+                OrderDate = o.OrderDate,
+                Address = o.Address,
+                PaymentId = o.PaymentId,
+            }).ToArrayAsync();
+
+            return response;
+        }
+        public async Task<OrderPaymentDTO> PlaceOrder(OrderPaymentDTO orderPaymentDTO)
         {
             using (var transaction = await _context.Database.BeginTransactionAsync())
             {
@@ -79,6 +131,22 @@ namespace ECommerceApp.Services
                     return null;
                 }
             }
+        }
+
+        public async Task<PaymentDTO[]> GetAllPayments()
+        {
+            PaymentDTO[] response = await _context.Payments.Select(p => new PaymentDTO
+            {
+                PaymentId = p.Id,
+                OrderId = p.OrderId,
+                PaymentMethod = p.PaymentMethod,
+                Status = p.Status,
+                CardName = p.CardName,
+                CardCVV = p.CardCVV,
+                CardExpirationDate = p.CardExpirationDate,
+                CardNumber = p.CardNumber,
+            }).ToArrayAsync();
+            return response;
         }
     }
 }
