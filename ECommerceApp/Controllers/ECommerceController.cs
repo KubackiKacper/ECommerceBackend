@@ -8,6 +8,7 @@ using Mapster;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Collections.Generic;
+using ECommerceApp.Services;
 
 
 namespace ECommerceApp.Controllers
@@ -18,10 +19,12 @@ namespace ECommerceApp.Controllers
     public class ECommerceController : Controller
     {
         private readonly ApplicationDbContext _db;
-        
-        public ECommerceController(ApplicationDbContext db) 
+        private readonly IPlaceOrderService _placeOrder;
+
+        public ECommerceController(ApplicationDbContext db, IPlaceOrderService placeOrder) 
         {
             _db = db;   
+            _placeOrder = placeOrder;
         }
         
         [HttpGet]
@@ -124,55 +127,19 @@ namespace ECommerceApp.Controllers
 
 
         }
-
+        //test
         [HttpPost]
         [Route("orders/place_order")]
         public async Task<IActionResult> PlaceOrder(OrderPaymentDTO orderPaymentDTO)
         {
-            using (var transaction = await _db.Database.BeginTransactionAsync())
+            var orderResponse = await _placeOrder.PlaceOrderAsync(orderPaymentDTO);
+
+            if (orderResponse == null)
             {
-                try
-                {
-                    Order orderInput = new Order
-                    {
-                        Email = orderPaymentDTO.Email,
-                        TotalPrice = orderPaymentDTO.TotalPrice,
-                        OrderDate = orderPaymentDTO.OrderDate,
-                        Address = orderPaymentDTO.Address,
-                        PaymentId = orderPaymentDTO.PaymentId,
-                    };
-
-                    _db.Orders.Add(orderInput);
-                    await _db.SaveChangesAsync();
-
-                    Payment paymentInput = new Payment
-                    {
-                        OrderId = orderInput.Id,
-                        PaymentMethod = orderPaymentDTO.PaymentMethod,
-                        Status = orderPaymentDTO.Status,
-                        CardName= orderPaymentDTO.CardName,
-                        CardCVV = orderPaymentDTO.CardCVV,
-                        CardExpirationDate = orderPaymentDTO.CardExpirationDate,
-                        CardNumber= orderPaymentDTO.CardNumber,
-                        
-                    };
-
-                    _db.Payments.Add(paymentInput);
-                    await _db.SaveChangesAsync();
-
-                    orderInput.PaymentId = paymentInput.Id;
-                    _db.Orders.Update(orderInput);
-                    await _db.SaveChangesAsync();
-                    await transaction.CommitAsync();
-
-                    return Created("orders/place_order" + orderInput.Id, new {Message = "Success"});
-                }
-                catch (Exception ex)
-                {
-                    await transaction.RollbackAsync();
-                    return BadRequest(ex.Message);
-                }
+                return BadRequest("Order placement failed.");
             }
+
+            return Ok(orderResponse);
         }
     }
 }
